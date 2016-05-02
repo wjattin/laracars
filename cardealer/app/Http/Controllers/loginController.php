@@ -17,5 +17,5 @@ class loginController extends Controller
 
         $login->save();
 
-        return view('frontend.profiles');
+        return redirect()->intended('/profiles/'.$request->profile_id);
     }}

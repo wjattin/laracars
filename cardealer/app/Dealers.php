@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Vehicles;
 
 class Dealers extends Model
 {
@@ -13,6 +14,9 @@ class Dealers extends Model
     }
     public function vehicles() {
         return $this->hasMany('App\Vehicles');
+    }
+    public function user() {
+        return $this->hasOne('App\User');
     }
 
 }

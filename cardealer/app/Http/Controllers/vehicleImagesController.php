@@ -3,23 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\vehicleImages;
-use App\vehicles;
+use App\Vehicles;
+use App\Profiles;
+
 use Illuminate\Http\Request;
 use DB;
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class vehicleImagesController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
 
-
-    public function vehicleImages($vehicles_id)
+    public function vehicleImages($vehicles_id, Request $request)
     {
         $vehicleImages = DB::table('vehicleImages')->where('vehicles_id', '=', $vehicles_id)->get();
-
         $vehicle = DB::table('vehicles')->where('id', '=', $vehicles_id)->get();
+        $profile = Profiles::find($request->user()->profile_id);
+        $dealer = (isset($profile->dealers_id) ? $profile->dealers_id : "");
 
-        return view('frontend.vehicleImages', ["vehicleImages" => $vehicleImages, "vehicle" => $vehicle]);
+        return view('frontend.vehicleImages', ["vehicleImages" => $vehicleImages, "vehicle" => $vehicle, "dealer" => $dealer ]);
     }
 
     public static function deleteImages($vehicles_id)
@@ -30,7 +34,6 @@ class vehicleImagesController extends Controller
             echo unlink(public_path() . $img->file_name);
             //var_dump($img);
         }
-
         return view('frontend.vehicles');
     }
     public static function deleteImage($id)
@@ -48,6 +51,7 @@ class vehicleImagesController extends Controller
         foreach ($request->files as $files) {
             foreach ($files as $file) {
                 if ($file) {
+
                     $string = str_random(10) . '_' . $request->vehicles_id . '_';
                     $file->move(public_path('images'), $string . $file->getClientOriginalName());
                     $image = new vehicleImages;
@@ -63,4 +67,5 @@ class vehicleImagesController extends Controller
         return redirect()->intended('/vehicleImages/'.$request->vehicles_id);
 
     }
+
 }

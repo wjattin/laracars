@@ -4,10 +4,11 @@
         <!-- Begin Content -->
         <div class="container">
 
-                <div class="row">
-                    <div class="large-6 medium-6 columns">
 
-                    <hr>
+                <div class="row">
+                    <div class="reveal" id="profile-modal" data-reveal>
+                    <div class="large-12 medium-12 columns">
+
                     {!! Form::open(array('url' => '/profiles', 'data-abide' => '')) !!}
                     <div class="name-field">
                     {!! Form::label('first','First Name') !!}
@@ -31,21 +32,35 @@
                     </div>
                     <div class="form-group">
                     {!! Form::label('dealers_id') !!}
-                    {!! Form::text('dealers_id','', array('class' => 'form-control')) !!}
+                        {!! Form::text('dealers_id',$dealer_id, array('class' => 'form-control')) !!}
                     </div>
 
                     <div class="form-group">
                     {!! Form::submit('Save Profile', array('class' => 'button')) !!}
                     </div>
                     {!! Form::close() !!}
-</div>
-                    <div class="large-6 medium-6 columns">
+</div></div>
+                    <div class="large-12 medium-12 columns">
                         <h1>Profiles</h1>
+                        @if($profile_id == "")
 
+                            <div class="alert callout" data-closable>
+                                <h5>Looks like you don't have a profile yet!</a></h5>
+                                <p>Your account will be limited until you  <a href="#" data-open="profile-modal" >add new profile.</a></p>
+                                <a href="#">It's dangerous to go alone, take this.</a>
+                                <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                         @foreach($profiles as $profile)
+                            @if($profile_id == $profile->id)
                             <h4><a href="/profiles/{!! $profile->id !!}">{!! $profile->first !!} {!! $profile->last !!} </a></h4>
+                            <!-- {!! $profile->user['password'] !!} -->
+                                <hr>
+                            @endif
 
-                            <hr>
+
                         @endforeach
 
                     </div>

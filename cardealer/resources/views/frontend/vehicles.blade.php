@@ -5,76 +5,112 @@
         <div class="container">
 
                 <div class="row">
-                    <div class="large-6 columns">
+                    @if($dealer != "")
 
-                    <hr>
+                        @else
+                        <hr>
+                        <div class="alert callout" data-closable>
+                            <h5>Remember to add your location to our <a href="/dealers">dealers list</a> and create a <a href="/profiles">profile.</a></h5>
+                            <p>Your account will be limited until you create a dealer and a buyer/seller profile.</p>
+                            <a href="#">It's dangerous to go alone, take this.</a>
+                            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+                    <div class="reveal" id="vehicle-modal" data-reveal>
+                    <div class="large-12 columns">
+
                     {!! Form::open(array('url' => '/vehicles', 'data-abide' => '')) !!}
                     <div class="name-field">
-                        {!! Form::label('vin','Vin') !!}
-                        {!! Form::text('vin','', array('class' => 'form-control', 'required' => 'true')) !!}
+                        {!! Form::label('vin','Vin', array()) !!}
+                        {!! Form::text('vin','', array('class' => 'form-control', 'required' => 'true','id' => 'vin')) !!}
+                        <span id="decode" class="button small">Decode</span>
                     </div>
                     <div class="name-field">
                     {!! Form::label('make','Make') !!}
-                    {!! Form::text('make','', array('class' => 'form-control', 'required' => 'true')) !!}
+                    {!! Form::text('make','', array('class' => 'form-control', 'required' => 'true','id' => 'make')) !!}
                     </div>
                     <div class="form-group">
                     {!! Form::label('model','Model') !!}
-                    {!! Form::text('model','', array('class' => 'form-control')) !!}
+                    {!! Form::text('model','', array('class' => 'form-control','id' => 'model')) !!}
                     </div>
                         <div class="form-group">
                     {!! Form::label('year','Year') !!}
-                    {!! Form::text('year','', array('class' => 'form-control')) !!}
+                    {!! Form::text('year','', array('class' => 'form-control','id' => 'year')) !!}
                     </div>
                     <div class="form-group">
                     {!! Form::label('transmission','Transmission') !!}
-                    {!! Form::text('transmission','', array('class' => 'form-control')) !!}
+                    {!! Form::text('transmission','', array('class' => 'form-control','id' => 'transmission')) !!}
                     </div>
                     <div class="form-group">
                     {!! Form::label('veh_condition', 'Condition (new/used)') !!}
-                    {!! Form::text('veh_condition','', array('class' => 'form-control')) !!}
+                    {!! Form::text('veh_condition','', array('class' => 'form-control','id' => 'veh_condition')) !!}
                     </div>
                     <div class="form-group">
                     {!! Form::label('comments','Comments') !!}
-                    {!! Form::textarea('comments','', array('class' => 'form-control')) !!}
+                    {!! Form::textarea('comments','', array('class' => 'form-control','id' => 'comments')) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::label('price','Price') !!}
-                        {!! Form::text('price','', array('class' => 'form-control')) !!}
+                        {!! Form::text('price','', array('class' => 'form-control','id'=>'price')) !!}
                     </div>
                     <div class="form-group">
-                    {!! Form::label('dealers_id') !!}
-                    {!! Form::text('dealers_id','', array('class' => 'form-control')) !!}
+                    <!-- {!! Form::label('dealers_id') !!} -->
+                    {!! Form::hidden('dealers_id',$dealer, array('class' => 'form-control')) !!}
                     </div>
                     <div class="form-group">
                     {!! Form::submit('Save Vehicle', array('class' => 'button')) !!}
                     </div>
                     {!! Form::close() !!}
-</div>
-                    <div class="large-6 columns">
+</div>    <button class="close-button" data-close aria-label="Close modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                    <div class="large-12 columns">
                         <h1>Vehicles</h1>
 
                         @foreach($vehicles as $vehicle)
-                            <h6>
+                            <div class="row">
+                                <div class="small-2 columns">
+                            <a class="thumbnail" href="/vehicleImages/{!! $vehicle->id !!}">
+                            @if($vehicle->images->first())
+                                    <img class="" src="{{ $vehicle->images->first()['file_name']  }}" alt="">
+                            @else
+                                    <img class="" src="http://placehold.it/400x400?text=NO IMAGE" alt="">
+                            @endif
+                                </a>
+                                    </div>
+                                <div class="small-8 columns">
+                            <h6><p>
                                 {!! $vehicle->year !!}
                                 {!! $vehicle->make !!}
                                 {!! $vehicle->model !!}
-                                <a href="/vehicleImages/{!! $vehicle->id !!}"><i class="fi-photo fi-large"></i> Add/Edit Images</a>
-                                |
-                                <a data-open="deleteVeh{!! $vehicle->id !!}">Delete Vehicle</a>
-                            </h6>
-                            <div class="reveal text-center" id="deleteVeh{!! $vehicle->id !!}" data-reveal>
-                                <h1 class="warning">Are you sure?</h1>
-                                <p>
-                                <a class="button" data-close aria-label="Close modal" >
-                                    Cancel
-                                </a>
-                                <a class="button" href="/vehicles/{!! $vehicle->id !!}/delete">Delete</a>
-                               </p>
+                                    <br>
+                                <small>  {!! substr($vehicle->comments, 0, 200)  !!} ...</small>
+                                    <br>
+                                    <em>Location: {!! $vehicle->dealer->city !!},
+                                    {!! $vehicle->dealer->state !!}
+                                    {!! $vehicle->dealer->location_name !!}
+                                    <a target="_blank" href="https://www.google.com/maps/place/{!! $vehicle->dealer->address1 !!},+{!! $vehicle->dealer->city !!},+{!! $vehicle->dealer->state !!}+{!! $vehicle->dealer->zip !!}">
+                                        View Map <i class="fi-map"></i>
+                                    </a>
+                                    </em>
+                                </p>
 
-                            </div>
+                            </h6>
+
+                         </div>
+                                <div class="small-2 columns">
+                                  <a class="comfortaa button alert expanded" href="/vehicleImages/{!! $vehicle->id !!}">$ {!!  number_format($vehicle->price)  !!}</a>
+
+                                    <a class="button expanded" href="/vehicleImages/{!! $vehicle->id !!}"> View Details <i class="fi-magnifying-glass"></i></a>
+                                </div>
+                                </div>
+
                             <hr>
                         @endforeach
-
+{{ $vehicles->links() }}
                     </div>
 
             </div>
