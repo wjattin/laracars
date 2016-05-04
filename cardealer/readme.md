@@ -1,3 +1,6 @@
+# laracars
+laracars is a dealer-to-dealer automotive trading web app built on laravel's framework.
+
 # Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
