@@ -1,6 +1,18 @@
 # laracars
 laracars is a dealer-to-dealer automotive trading web app built on laravel's framework.
 
+It has the ability to host multiple dealer's inventories, vehicle images.
+
+Basic search functionality (year / make /model)
+
+Uses laravel built-in authentication
+
+VIN decoding capabilities
+
+API for serving JSON files
+
+This app is currently under production
+
 # Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
