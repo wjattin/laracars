@@ -59,9 +59,9 @@
         @yield('content')
         @yield('column-a')
         </div>
-        <p class="show-for-small-only">small view</p>
+        {{--<p class="show-for-small-only">small view</p>
         <p class="show-for-medium-only">medium view</p>
-        <p class="show-for-large-only">large view</p>
+        <p class="show-for-large-only">large view</p>--}}
         <div class="footerpush"></div>
         <footer class="footer">
             <p class="row show-for-medium-up">Copyright &copy{!! date('Y'); !!}</p>
@@ -125,6 +125,53 @@
                     autoplay:true,
                     arrows:true
                 });
+                //load years
+                $.getJSON( "json/years", function( data ) {
+                    var select = $('#year');
+                    //select.hide();
+                    $.each(data, function (key, val) {
+                        //items.push( "<li id='" + key + "'>" + val + "</li>" );
+                        //alert(val['make']);
+                        var option = new Option(val['year'], val['year']);
+                        select.append($(option));
+                    });
+                });
+                //load makes
+                $.getJSON( "json/makes", function( data ) {
+                    var select = $('#makes');
+                    //select.hide();
+                    $.each(data, function (key, val) {
+                        //items.push( "<li id='" + key + "'>" + val + "</li>" );
+                        //alert(val['make']);
+                        var option = new Option(val['make'], val['make']);
+                        select.append($(option));
+                    });
+                });
+                //load models
+                $('#makes').change(function(){
+                    var make = $( '#makes option:selected' ).text();
+                    $.getJSON( "json/models/"+ make , function( data ) {
+                        $('#models')
+                                .find('option')
+                                .remove()
+                                .end()
+                                .append('<option value="">select a model</option>')
+                                .val('');
+
+
+                        var select = $('#models');
+                        console.log(select);
+                        //select.hide();
+                        $.each(data, function (key, val) {
+
+                            //items.push( "<li id='" + key + "'>" + val + "</li>" );
+                            //alert(val['model']);
+                            var option = new Option(val['model'], val['model']);
+                            select.append($(option));
+                        });
+                    });
+
+                });
 
             });
             $(window).load(function(){
@@ -136,9 +183,6 @@
                 var imgContainer = $('#image-field').clone();
                 imgContainer.appendTo('.image-fields');
             }
-
-
-
                 $('.deleteImageConfirm').click(function (e) {
                     e.preventDefault();
                     var container = $(this).parent('div');

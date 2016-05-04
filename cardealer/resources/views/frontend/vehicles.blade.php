@@ -18,24 +18,29 @@
                     @endif
 
                         <div class="row">
-                            <p><br>
-                                <a href="#" class="button large-3 columns" data-open="search-modal" >Search <i class="fi-magnifying-glass"></i></a>
-                            </p>
+                            <div class="large-4 columns"><p></p>
+                                <a href="#" class="button  columns" data-open="search-modal" >Search <i class="fi-magnifying-glass"></i></a>
+                            </div>
+                            <div class="large-8 columns">
+                                <p><br>Sort: <a href="?sortby=year">Year</a> | <a href="?sortby=make">Make</a> | <a href="?sortby=model">Model</a> | <a href="?sortby=price">Price</a> </p>
+                            </div>
                         </div>
                         <div class="large-12 large-centered columns reveal" id="search-modal" data-reveal>
 
                             {!! Form::open(array('url' => '/vehicles/search', 'method' => 'get')) !!}
                             <div class="name-field">
                                 {!! Form::label('year','Year', array()) !!}
-                                {!! Form::text('year','', array('class' => 'form-control')) !!}
+
+                                {!! Form::select('year', array('' => 'select year')) !!}
+
                             </div>
                             <div class="name-field">
-                                {!! Form::label('make','Make') !!}
-                                {!! Form::text('make','', array('class' => 'form-control')) !!}
+                                {!! Form::label('makes','Make') !!}
+                                {!! Form::select('makes',array('' => 'select make')) !!}
                             </div>
                             <div class="form-group">
-                                {!! Form::label('model','Model') !!}
-                                {!! Form::text('model','', array('class' => 'form-control','id' => 'model')) !!}
+                                {!! Form::label('models','Model') !!}
+                                {!! Form::select('models', array('' => 'select model')) !!}
                             </div>
 
 

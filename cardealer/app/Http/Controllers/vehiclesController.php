@@ -18,7 +18,8 @@ class vehiclesController extends Controller
         $this->middleware('auth');
     }
     public function vehicles(Request $request) {
-        $vehicles = Vehicles::paginate(3);
+        $sortby = (isset($request->sortby) ? $request->sortby : 'id');
+        $vehicles = Vehicles::orderBy($sortby, 'DESC')->paginate(3);
         $profile = Profiles::find($request->user()->profile_id);
         $dealer = (isset($profile->dealers_id) ? $profile->dealers_id : "");
         return view('frontend.vehicles', ["vehicles" => $vehicles, "dealer"=> $dealer]);
@@ -102,16 +103,16 @@ class vehiclesController extends Controller
         $year = $request->year;
         $make = $request->make;
         $model = $request->model;
-        $query = Vehicles::where('year', 'LIKE', "%{$year}%");
+        $query = Vehicles::where('year', '=', "{$year}");
 
       /*  if($year != ""){
             $query = Vehicles::where('year', 'LIKE', "%{$year}%");
         } */
         if($make != "") {
-            $query = $query->where('make', 'LIKE', "%{$make}%");
+            $query = $query->where('make', '=', "{$make}");
         }
         if($model != "") {
-            $query = $query->where('model', 'LIKE', "%{$model}%");
+            $query = $query->where('model', '=', "{$model}");
         }
         /*foreach($searchTerms as $term)
         {
@@ -121,7 +122,20 @@ class vehiclesController extends Controller
         $dealer = (isset($profile->dealers_id) ? $profile->dealers_id : "");
         $vehicles = $query->paginate(3);
         return view('frontend.vehicles', ["vehicles" => $vehicles, "dealer" => $dealer, "request" => $request]);
+    }
+    public function getMakes(){
+        $makes = Vehicles::distinct()->select('make')->groupBy('make')->orderBy('make', 'ASC')->get();
+        return response()->json($makes);
 
+    }
+    public function getModels($make){
+        $models = Vehicles::distinct()->select('model')->where('make','LIKE',$make)->orderBy('model', 'ASC')->get();
+        return response()->json($models);
+
+    }
+    public function getYears(){
+        $years = Vehicles::distinct()->select('year')->orderBy('year', 'DESC')->get();
+        return response()->json($years);
 
     }
 }
