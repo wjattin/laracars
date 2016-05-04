@@ -97,4 +97,31 @@ class vehiclesController extends Controller
         $json = file_get_contents($url);
         return view('frontend.decodeVin', ["json" => $json]);
     }
+    public function search(Request $request) {
+
+        $year = $request->year;
+        $make = $request->make;
+        $model = $request->model;
+        $query = Vehicles::where('year', 'LIKE', "%{$year}%");
+
+      /*  if($year != ""){
+            $query = Vehicles::where('year', 'LIKE', "%{$year}%");
+        } */
+        if($make != "") {
+            $query = $query->where('make', 'LIKE', "%{$make}%");
+        }
+        if($model != "") {
+            $query = $query->where('model', 'LIKE', "%{$model}%");
+        }
+        /*foreach($searchTerms as $term)
+        {
+            $query = $query->orWhere('name', 'LIKE', '%'. $term .'%');
+        }*/
+        $profile = Profiles::find($request->user()->profile_id);
+        $dealer = (isset($profile->dealers_id) ? $profile->dealers_id : "");
+        $vehicles = $query->paginate(3);
+        return view('frontend.vehicles', ["vehicles" => $vehicles, "dealer" => $dealer, "request" => $request]);
+
+
+    }
 }

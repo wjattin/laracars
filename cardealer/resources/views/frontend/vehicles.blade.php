@@ -5,9 +5,7 @@
         <div class="container">
 
                 <div class="row">
-                    @if($dealer != "")
-
-                        @else
+                    @if($dealer == "")
                         <hr>
                         <div class="alert callout" data-closable>
                             <h5>Remember to add your location to our <a href="/dealers">dealers list</a> and create a <a href="/profiles">profile.</a></h5>
@@ -18,57 +16,43 @@
                             </button>
                         </div>
                     @endif
-                    <div class="reveal" id="vehicle-modal" data-reveal>
-                    <div class="large-12 columns">
 
-                    {!! Form::open(array('url' => '/vehicles', 'data-abide' => '')) !!}
-                    <div class="name-field">
-                        {!! Form::label('vin','Vin', array()) !!}
-                        {!! Form::text('vin','', array('class' => 'form-control', 'required' => 'true','id' => 'vin')) !!}
-                        <span id="decode" class="button small">Decode</span>
-                    </div>
-                    <div class="name-field">
-                    {!! Form::label('make','Make') !!}
-                    {!! Form::text('make','', array('class' => 'form-control', 'required' => 'true','id' => 'make')) !!}
-                    </div>
-                    <div class="form-group">
-                    {!! Form::label('model','Model') !!}
-                    {!! Form::text('model','', array('class' => 'form-control','id' => 'model')) !!}
-                    </div>
-                        <div class="form-group">
-                    {!! Form::label('year','Year') !!}
-                    {!! Form::text('year','', array('class' => 'form-control','id' => 'year')) !!}
-                    </div>
-                    <div class="form-group">
-                    {!! Form::label('transmission','Transmission') !!}
-                    {!! Form::text('transmission','', array('class' => 'form-control','id' => 'transmission')) !!}
-                    </div>
-                    <div class="form-group">
-                    {!! Form::label('veh_condition', 'Condition (new/used)') !!}
-                    {!! Form::text('veh_condition','', array('class' => 'form-control','id' => 'veh_condition')) !!}
-                    </div>
-                    <div class="form-group">
-                    {!! Form::label('comments','Comments') !!}
-                    {!! Form::textarea('comments','', array('class' => 'form-control','id' => 'comments')) !!}
-                    </div>
-                    <div class="form-group">
-                        {!! Form::label('price','Price') !!}
-                        {!! Form::text('price','', array('class' => 'form-control','id'=>'price')) !!}
-                    </div>
-                    <div class="form-group">
-                    <!-- {!! Form::label('dealers_id') !!} -->
-                    {!! Form::hidden('dealers_id',$dealer, array('class' => 'form-control')) !!}
-                    </div>
-                    <div class="form-group">
-                    {!! Form::submit('Save Vehicle', array('class' => 'button')) !!}
-                    </div>
-                    {!! Form::close() !!}
-</div>    <button class="close-button" data-close aria-label="Close modal" type="button">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <div class="row">
+                            <p><br>
+                                <a href="#" class="button large-3 columns" data-open="search-modal" >Search <i class="fi-magnifying-glass"></i></a>
+                            </p>
+                        </div>
+                        <div class="large-12 large-centered columns reveal" id="search-modal" data-reveal>
+
+                            {!! Form::open(array('url' => '/vehicles/search', 'method' => 'get')) !!}
+                            <div class="name-field">
+                                {!! Form::label('year','Year', array()) !!}
+                                {!! Form::text('year','', array('class' => 'form-control')) !!}
+                            </div>
+                            <div class="name-field">
+                                {!! Form::label('make','Make') !!}
+                                {!! Form::text('make','', array('class' => 'form-control')) !!}
+                            </div>
+                            <div class="form-group">
+                                {!! Form::label('model','Model') !!}
+                                {!! Form::text('model','', array('class' => 'form-control','id' => 'model')) !!}
+                            </div>
+
+
+
+                            <div class="form-group">
+                                {!! Form::submit('Search', array('class' => 'button')) !!}
+                            </div>
+                            {!! Form::close() !!}
+                        </div>
+                        <div class="reveal" id="vehicle-modal" data-reveal>
+
                         </div>
                     <div class="large-12 columns">
                         <h1>Vehicles</h1>
+                        @if(isset($request->year))
+                        <h2>Search Results</h2>
+                        @endif
 
                         @foreach($vehicles as $vehicle)
                             <div class="row">

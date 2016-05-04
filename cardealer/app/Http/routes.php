@@ -58,7 +58,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('dealers',  'dealersController@dealers')->name('dealers');
     Route::post('dealers', 'dealersController@new_dealer')->name('newDealer');
     //Vehicles
-    Route::get('vehicles', 'vehiclesController@vehicles')->name('vehicles');
+        Route::get('vehicles', 'vehiclesController@vehicles')->name('vehicles');
+        Route::get('vehicles/search', 'vehiclesController@search')->name('search');
     Route::get('myvehicles', 'vehiclesController@myvehicles')->name('myvehicles');
     Route::get('vehicles/{id}/delete', 'vehiclesController@deleteVehicles')->name('deleteVehicles');
     Route::post('vehicles/update', 'vehiclesController@update_vehicle')->name('updateVehicles');

@@ -15,8 +15,29 @@
             </h5>
 
             <p>
-                {!! nl2br($vehicle[0]->comments) !!}
+                <b>Features:</b>
+                <small>
+                @foreach(explode(PHP_EOL,$vehicle[0]->comments) as $feature)
 
+                   @foreach (explode(":",$feature) as $item=>$label)
+                      @if( ($item == 0) && ($label != ""))
+                        <br><b>{!! $label !!} :</b>
+                      @else
+                       {!! $label !!}
+                      @endif
+                    @endforeach
+                @endforeach</small>
+
+            </p>
+            <hr>
+            <p>
+                <b>Condition: </b>{!! $vehicle[0]->veh_condition !!}
+            </p>
+            <hr>            <p>
+                <b>Transmission: </b>{!! $vehicle[0]->transmission !!}
+            </p>
+            <hr>            <p>
+                <b>Price: </b>${!! number_format($vehicle[0]->price) !!}
             </p>
             <hr>
 
